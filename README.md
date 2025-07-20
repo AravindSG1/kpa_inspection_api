@@ -70,37 +70,51 @@ bash
 git clone https://github.com/yourusername/kpa-assignment.git
 cd kpa-assignment
 ```
-### 2.Create and activate virtual environment:
+### 2. 🐳 Build and Start the Containers
+`docker-compose up --build`  
+This will:
+
+Build the Django app container
+
+Set up the PostgreSQL database
+
+Apply migrations automatically
+
+### 3. ⚙️ Environment Configuration
+Update the .env file at the project root with your database and app settings:
+
 ```
-bash
-
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+POSTGRES_DB=db_name
+POSTGRES_USER=db_user
+POSTGRES_PASSWORD=db_user_password
+DB_HOST=db
+DB_PORT=5432
 ```
-### 3.Install dependencies:
 
-`pip install -r requirements.txt`  
-### 4.Configure PostgreSQL:
+### 4. 🔁 Useful Docker Commands
+Rebuild containers:
+```
+docker-compose down
+docker-compose up --build
+```
+## 📘 API Documentation
+This project uses drf-spectacular to auto-generate OpenAPI-compliant API documentation for the Django REST Framework.
 
-Set up a PostgreSQL database and user.
+Once the server is running, you can access the documentation at:
 
-Add your DB credentials to .env or directly in settings.py.
+Endpoint	Description  
+`/api/schema/`             🔧 Raw OpenAPI schema in yaml format  
+`/api/docs/swagger/`	     📄 Swagger UI (interactive API explorer)  
+`/api/docs/redoc/`bb       📘 ReDoc UI (alternative documentation)
 
-### 5.Run migrations:
-
-`python manage.py migrate`
-
-### 6.Start development server:
-
-`python manage.py runserver`
-
+These endpoints are auto-generated and kept in sync with your views and serializers.
 
 ## 🛠️ Tech Stack
 Backend: Django, Django REST Framework
 
 Database: PostgreSQL
 
-Tools: Postman, SwaggerHub (reference only)
+Tools: Postman, SwaggerHub 
 
 ## ✅ Features Implemented
 Create new wheel specification form

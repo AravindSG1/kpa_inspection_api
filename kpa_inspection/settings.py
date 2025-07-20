@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'app',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -81,14 +82,17 @@ WSGI_APPLICATION = 'kpa_inspection.wsgi.application'
 #     }
 # }
 
+import os
+from dotenv import load_dotenv
+load_dotenv()  # Loads .env file variables into environment, not mandatory for docker since it find by itself
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kpa_db',
-        'USER': 'user_name',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',     # or your DB host
-        'PORT': '5432',          # default PostgreSQL port
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),     # or your DB host
+        'PORT': os.getenv('DB_PORT'),          # default PostgreSQL port
     }
 }
 
@@ -133,3 +137,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Wheel Specification',
+}

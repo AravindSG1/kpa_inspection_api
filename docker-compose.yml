@@ -1,0 +1,30 @@
+# Define the services (containers) to run
+services:
+  web:  # Django web application
+    build: .  # Build the Docker image from the current directory (uses Dockerfile)
+    command: >  # Run migrations and start the Django development server
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app  # Mount the current directory to /app in the container (for live code updates)
+    ports:
+      - "8000:8000"  # Map port 8000 on the host to port 8000 in the container
+    env_file:
+      - .env  # Load environment variables from the .env file
+    depends_on:
+      - db  # Ensure the 'db' service starts before the web service
+
+  db:  # PostgreSQL database service
+    image: postgres:17  # Use the official PostgreSQL 17 image from Docker Hub
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/  # Store database files in a persistent named volume
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}  # Database name (read from .env)
+      POSTGRES_USER: ${POSTGRES_USER}  # Database user (read from .env)
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Database password (read from .env)
+    ports:
+      - "5432:5432"  # Expose PostgreSQL on default port 5432 (host:container)
+
+# Define persistent volumes (data stays even if the container is destroyed)
+volumes:
+  postgres_data:  # Named volume to persist PostgreSQL data
